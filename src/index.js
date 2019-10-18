@@ -1,55 +1,24 @@
-// module.exports = function check(str, bracketsConfig) {
-//   // your solution
-//   for (let i = 0; i < Math.floor(str.length / 2); i++) {
-//     console.log(i);
-//   }
-// };
+module.exports = function check(str, bracketsConfig) {
+	const strArr = str.split("");
+	const result = [];
 
-function check(str, bracketsConfig) {
-  // your solution
-  // function hasMatch(str, strIndex, arr) {
-  //   return arr.some(function(arrItem) {
-  //     return str[strIndex] === arrItem[0] && str[str.length - strIndex - 1] === arrItem[1]
-  //   });
-  // }
+	for (let i = 0; i < strArr.length; i++) {
+		for (let b = 0; b < bracketsConfig.length; b++) {
+			if (strArr[i] === bracketsConfig[b][0]) {
+				result.push(bracketsConfig[b][0]);
 
-  // for (let i = 0; i < str.length; i++) {
-  //   for (let j = 0; j < bracketsConfig.length; j++) {
-  //     if (str[i] === bracketsConfig[j][0]) {
-  //       if (str.indexOf(bracketsConfig[j][1]) !== -1) {
-  //
-  //         break;
-  //       }  else continue;
-  //     }
-  //     return false;
-  //   }
-  // }
+				if (strArr[i] === bracketsConfig[b][1] && strArr[i] === result[result.length-2]) {
+					result.pop();
+					result.pop();
+				}
+			}
+			else if (str[i] === bracketsConfig[b][1]) {
+				if (result[result.length-1] !== bracketsConfig[b][0]) return false;
 
-  function hasMatch(str, arr) {
-    if (str.length > 1) {
-      const strPart = str.slice(1);
+				result.pop();
+			}
+		}
+	}
 
-      for (let i = 0; i < arr.length; i++) {
-        if (str[0] === arr[i][0] && strPart.indexOf(arr[i][1]) !== -1) {
-          return strPart.indexOf(arr[i][1]) + 1;
-        }
-      }
-    }
-
-    return false
-  }
-
-  function replaceStr(str, arr) {
-    const match = hasMatch(str, arr);
-
-    if (match !== false) {
-      str = str.substring(1, match) + str.slice(match + 1);
-
-      replaceStr(str, arr);
-    }
-  }
-
-  replaceStr(str, bracketsConfig);
-}
-
-check('([{}])', [['(', ')'], ['[', ']'], ['{', '}']]);
+	return result.length === 0;
+};
